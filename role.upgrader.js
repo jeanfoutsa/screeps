@@ -38,17 +38,29 @@ const roleUpgrader = {
             creep.say('upgrading');
         }
 
-        if(creep.memory.upgrading) {
+        if(creep.memory.upgrading) 
+		{
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller);
             }
 			// Sign controller if last sign date over 1 day
-			if(creep.room.controller.sign.time + 28000 < Game.time || creep.room.controller.sign.username != 'Nukyo')
+			if(creep.room.controller.sign)
 			{
-				if(creep.signController(creep.room.controller, "I come in peace.") == ERR_NOT_IN_RANGE) {
-					creep.moveTo(creep.room.controller);
+				if(creep.room.controller.sign.time + 28000 < Game.time || creep.room.controller.sign.username != 'Nukyo')
+				{
+					if(creep.signController(creep.room.controller, "I come in peace.") == ERR_NOT_IN_RANGE) 
+					{
+						creep.moveTo(creep.room.controller);
+					}
 				}
 			}
+			else 
+			{
+				if(creep.signController(creep.room.controller, "I come in peace.") == ERR_NOT_IN_RANGE) 
+				{
+						creep.moveTo(creep.room.controller);
+				}
+			}			
         }
         else {
 			if(creep.ticksToLive < 100){

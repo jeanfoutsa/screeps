@@ -44,22 +44,29 @@ const roleHarvester = {
 		const myContainer = mySource.pos.findInRange(FIND_STRUCTURES,1,{filter:(s) => s.structureType == STRUCTURE_CONTAINER})[0];
 		const myDropped = mySource.pos.findInRange(FIND_DROPPED_RESOURCES,1)[0];
 		const myEnergy = (( myContainer != undefined ? myContainer.store.energy : 0 ) + ( myDropped != undefined ? myDropped.amount : 0 ));
+		let nearsource;
 		 
 		// Build container if no container near the source
-		if(myContainer == undefined)
-		{
-			const csContainer = mySource.pos.findInRange(FIND_CONSTRUCTION_SITES,1,{filter:(s) => s.structureType == STRUCTURE_CONTAINER});
-			if(csContainer.length == 0)
+			if(myContainer == undefined)
 			{
-                creep.pos.createConstructionSite(STRUCTURE_CONTAINER);
+				const csContainer = mySource.pos.findInRange(FIND_CONSTRUCTION_SITES,1,{filter:(s) => s.structureType == STRUCTURE_CONTAINER});
+				
+				if(csContainer.length == 0)
+				{
+					nearsource = creep.pos.findInRange(FIND_SOURCES,1)[0];
+					
+					if (nearsource != undefined && nearsource == mySource)
+					{
+						creep.pos.createConstructionSite(STRUCTURE_CONTAINER);
+					}
+				}
+				tasks.construct(creep,csContainer[0]);
 			}
-			tasks.construct(creep,csContainer[0]);
-		}
-		// Repair container if damaged
-		else if(myContainer.hits + 100 < myContainer.hitsMax)
-		{
-			creep.repair(myContainer);
-		}
+			// Repair container if damaged
+			else if(myContainer.hits + 100 < myContainer.hitsMax)
+			{
+				creep.repair(myContainer);
+			}
 		
 		//prevent overmining and invaders early game, need rework
 		if (myEnergy < 2000)

@@ -25,6 +25,10 @@ const structSpawn = require('struct.spawn');
 const tasks = require('tasks');
 const safemode = require('safemode');
 
+global.load = _.round(Game.cpu.getUsed());
+
+console.log(Game.time, 'Script reload', 'Load: ' + global.load, 'Bucket: ' + Game.cpu.bucket);
+
 module.exports.loop = function () {
 	
 	const CPUstart = Game.cpu.getUsed();
